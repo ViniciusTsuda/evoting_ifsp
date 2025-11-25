@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eVoting - Sistema de Votação</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      overflow: hidden;
+      width: 100%;
+      max-width: 500px;
+      transition: all 0.3s ease;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e1e5e9;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .carteira-info {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .carteira-info h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .carteira-address {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #333;
+      word-break: break-all;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .candidates-grid {
+      display: grid;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .candidate-card {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      border: 2px solid #e1e5e9;
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .candidate-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .candidate-card.selected {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: #667eea;
+    }
+
+    .candidate-info h4 {
+      margin-bottom: 5px;
+      font-size: 1.1rem;
+    }
+
+    .candidate-info p {
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    .candidate-id {
+      background: rgba(255,255,255,0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 12px;
+      margin: 20px 0;
+      font-weight: 500;
+      text-align: center;
+      animation: slideIn 0.3s ease;
+    }
+
+    .message.success {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      color: #155724;
+      border: 2px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+      color: #721c24;
+      border: 2px solid #f5c6cb;
+    }
+
+    .message.info {
+      background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+      color: #0c5460;
+      border: 2px solid #bee5eb;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    .vote-success {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .vote-success h2 {
+      color: #28a745;
+      margin-bottom: 15px;
+    }
+
+    .tx-hash {
+      font-family: 'Courier New', monospace;
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 8px;
+      word-break: break-all;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin: 10px;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .header {
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🗳️ eVoting</h1>
+      <p>Sistema de Votação Eletrônica</p>
+    </div>
+    
+    <div class="content">
+      <!-- Seção de Login -->
+      <form id="loginForm" style="display: block;">
+        <div class="form-group">
+          <label for="nome">Nome Completo:</label>
+          <input type="text" id="nome" required placeholder="Digite seu nome completo">
+        </div>
+
+        <div class="form-group">
+          <label for="dataNascimento">Data de Nascimento:</label>
+          <input type="date" id="dataNascimento" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cpf">CPF:</label>
+          <input type="text" id="cpf" required placeholder="000.000.000-00" maxlength="14">
+        </div>
+
+        <button type="submit" class="btn">🔐 Fazer Login</button>
+      </form>
+
+      <!-- Seção de Votação -->
+      <div id="votingSection" style="display: none;">
+        <!-- Info da Carteira -->
+        <div id="carteiraInfo" class="carteira-info">
+          <h3>🔑 Sua Carteira</h3>
+          <div class="carteira-address" id="carteiraEndereco"></div>
+        </div>
+
+        <!-- Status da Votação -->
+        <div id="statusVotacao" class="message info" style="display: none;">
+          <strong>Status da Votação:</strong> <span id="statusTexto">-</span>
+        </div>
+
+        <!-- Seleção de Candidatos -->
+        <div id="candidatosSection">
+          <h3 style="margin-bottom: 20px; color: #333;">Escolha seu candidato:</h3>
+          <div id="candidatesList" class="candidates-grid">
+            <!-- Candidatos serão carregados aqui -->
+          </div>
+        </div>
+
+        <button id="btnVotar" class="btn" style="display: none;" disabled>
+          📊 Confirmar Voto
+        </button>
+
+        <div id="voteSuccess" class="vote-success" style="display: none;">
+          <h2>✅ Voto Confirmado!</h2>
+          <p>Seu voto foi registrado com sucesso na blockchain.</p>
+          <div class="tx-hash">
+            <strong>Hash da Transação:</strong><br>
+            <span id="transactionHash"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Área de Mensagens -->
+      <div id="messages"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:4000/api';
+    let eleitorData = null;
+    let selectedCandidateId = null;
+    let candidatos = [];
+
+    // Formatação automática do CPF
+    document.getElementById('cpf').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length <= 11) {
+        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        e.target.value = value;
+      }
+    });
+
+    function showMessage(message, type = 'info') {
+      const messagesDiv = document.getElementById('messages');
+      const messageEl = document.createElement('div');
+      messageEl.className = `message ${type}`;
+      messageEl.innerHTML = message;
+      messagesDiv.appendChild(messageEl);
+      
+      setTimeout(() => {
+        if (messageEl.parentNode) {
+          messageEl.remove();
+        }
+      }, 5000);
+    }
+
+    // Login do eleitor
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const nome = document.getElementById('nome').value.trim();
+      const dataNascimento = document.getElementById('dataNascimento').value;
+      const cpf = document.getElementById('cpf').value.replace(/\D/g, '');
+
+      if (!nome || !dataNascimento || !cpf) {
+        showMessage('Preencha todos os campos', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/eleitor/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, dataNascimento, cpf }),
+        });
+
+        if (!res.ok) {
+          throw new Error('Eleitor não encontrado ou dados incorretos');
+        }
+
+        eleitorData = await res.json();
+        
+        // Mostra seção de votação
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('votingSection').style.display = 'block';
+        document.getElementById('carteiraEndereco').textContent = eleitorData.eleitor.carteira;
+        
+        // Carrega status e candidatos
+        await loadVotingStatus();
+        await loadCandidates();
+        
+        showMessage('Login realizado com sucesso!', 'success');
+        
+      } catch (error) {
+        showMessage(`❌ Erro no login: ${error.message}`, 'error');
+      }
+    });
+
+    async function loadVotingStatus() {
+      try {
+        const res = await fetch(`${API_BASE}/voto/status`);
+        const status = await res.json();
+        
+        const statusDiv = document.getElementById('statusVotacao');
+        const statusTexto = document.getElementById('statusTexto');
+        
+        if (status.votacaoAtiva) {
+          statusTexto.textContent = 'Votação em andamento ✅';
+          statusDiv.className = 'message success';
+        } else {
+          statusTexto.textContent = 'Votação não está ativa ❌';
+          statusDiv.className = 'message error';
+        }
+        
+        statusDiv.style.display = 'block';
+        
+      } catch (error) {
+        console.error('Erro ao carregar status:', error);
+      }
+    }
+
+    async function loadCandidates() {
+      try {
+        const res = await fetch(`${API_BASE}/voto/resultados`);
+        const data = await res.json();
+        candidatos = data.resultados;
+        
+        const candidatesList = document.getElementById('candidatesList');
+        
+        if (candidatos.length === 0) {
+          candidatesList.innerHTML = '<p style="text-align: center; color: #666;">Nenhum candidato cadastrado</p>';
+          return;
+        }
+        
+        candidatesList.innerHTML = candidatos.map(candidato => `
+          <div class="candidate-card" onclick="selectCandidate(${candidato.id})">
+            <div class="candidate-info">
+              <h4>${candidato.nome}</h4>
+            </div>
+            <div class="candidate-id">#${candidato.id}</div>
+          </div>
+        `).join('');
+        
+      } catch (error) {
+        console.error('Erro ao carregar candidatos:', error);
+        showMessage('Erro ao carregar candidatos', 'error');
+      }
+    }
+
+    function selectCandidate(candidateId) {
+      // Remove seleção anterior
+      document.querySelectorAll('.candidate-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      // Seleciona novo candidato
+      event.currentTarget.classList.add('selected');
+      selectedCandidateId = candidateId;
+      
+      // Habilita botão de votar
+      const btnVotar = document.getElementById('btnVotar');
+      btnVotar.style.display = 'block';
+      btnVotar.disabled = false;
+      btnVotar.innerHTML = `📊 Votar em: ${candidatos.find(c => c.id == candidateId).nome}`;
+    }
+
+    // Função de votação
+    document.getElementById('btnVotar').addEventListener('click', async () => {
+      if (!eleitorData || !selectedCandidateId) {
+        showMessage('Selecione um candidato primeiro', 'error');
+        return;
+      }
+
+      if (!window.ethereum) {
+        showMessage('MetaMask não encontrada. Instale a extensão MetaMask.', 'error');
+        return;
+      }
+
+      try {
+        const btnVotar = document.getElementById('btnVotar');
+        btnVotar.disabled = true;
+        btnVotar.innerHTML = '<div class="loading"></div>Processando voto...';
+
+        // Conecta com MetaMask
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        // Verifica que a conta corrente do MetaMask é a carteira do eleitor
+        const connectedAddress = await signer.getAddress();
+        if (connectedAddress.toLowerCase() !== String(eleitorData.eleitor.carteira || '').toLowerCase()) {
+          showMessage('Conecte a carteira correta no MetaMask (a mesma mostrada como sua carteira).', 'error');
+          // Reabilita botão
+          btnVotar.disabled = false;
+          btnVotar.innerHTML = `Votar em: ${candidatos.find(c => c.id == selectedCandidateId).nome}`;
+          return;
+        }
+
+        // Assina o hash do eleitor diretamente
+        const hashBytes = ethers.utils.arrayify(eleitorData.hash);
+        const signature = await signer.signMessage(hashBytes);
+        const { v, r, s } = ethers.utils.splitSignature(signature);
+
+        // Envia voto para o backend
+        const res = await fetch(`${API_BASE}/voto/votar`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            candidatoId: selectedCandidateId,
+            eleitorHash: eleitorData.hash,
+            v, r, s
+          })
+        });
+
+        if (!res.ok) {
+          const error = await res.json();
+          throw new Error(error.error || 'Erro ao votar');
+        }
+
+        const result = await res.json();
+        
+        // Mostra sucesso
+        document.getElementById('candidatosSection').style.display = 'none';
+        btnVotar.style.display = 'none';
+        document.getElementById('voteSuccess').style.display = 'block';
+        document.getElementById('transactionHash').textContent = result.txHash;
+        
+        showMessage('Voto confirmado com sucesso!', 'success');
+
+      } catch (error) {
+        console.error('Erro ao votar:', error);
+        showMessage(`Erro ao votar: ${error.message}`, 'error');
+        
+        // Reabilita botão
+        const btnVotar = document.getElementById('btnVotar');
+        btnVotar.disabled = false;
+        btnVotar.innerHTML = `Votar em: ${candidatos.find(c => c.id == selectedCandidateId).nome}`;
+      }
+    });
+  </script>
+</body>
+</html>

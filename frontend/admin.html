@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eVoting - Painel Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    .main-content {
+      padding: 40px;
+    }
+
+    .login-section {
+      text-align: center;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .admin-panel {
+      display: none;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .tab {
+      padding: 15px 25px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .tab:hover {
+      color: #667eea;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      margin: 5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-danger {
+      background: linear-gradient(90deg, #ff6b6b, #ee5a52);
+    }
+
+    .btn-success {
+      background: linear-gradient(90deg, #51cf66, #40c057);
+    }
+
+    .status-card {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 15px;
+      margin: 20px 0;
+      border-left: 5px solid #667eea;
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .status-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .status-label {
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .status-value {
+      color: #667eea;
+      font-weight: 500;
+    }
+
+    .eleitores-grid {
+      display: grid;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .eleitor-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+    }
+
+    .eleitor-card h4 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .eleitor-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .resultados-grid {
+      display: grid;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .resultado-card {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      border: 2px solid #e1e5e9;
+    }
+
+    .resultado-card h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .votos-count {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-weight: 500;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: #667eea;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .tab {
+        text-align: center;
+      }
+      
+      .eleitor-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🗳️ eVoting</h1>
+      <p>Painel de Administração</p>
+    </div>
+    
+    <div class="main-content">
+      <!-- Seção de Login -->
+      <div id="loginSection" class="login-section">
+        <h2 style="margin-bottom: 30px; color: #333;">Acesso Administrativo</h2>
+        <div class="form-group">
+          <label for="adminKey">Chave de Administrador:</label>
+          <input type="password" id="adminKey" placeholder="Digite a chave secreta">
+        </div>
+        <button class="btn" onclick="login()">Entrar</button>
+        <div id="loginMessage"></div>
+      </div>
+
+      <!-- Painel Principal -->
+      <div id="adminPanel" class="admin-panel">
+        <div class="tabs">
+          <button class="tab active" onclick="showTab('status')">📊 Status</button>
+          <button class="tab" onclick="showTab('eleitores')">👥 Eleitores</button>
+          <button class="tab" onclick="showTab('candidatos')">🏛️ Candidatos</button>
+          <button class="tab" onclick="showTab('resultados')">📈 Resultados</button>
+        </div>
+
+        <!-- Aba Status -->
+        <div id="statusTab" class="tab-content active">
+          <h3>Status do Sistema</h3>
+          <div class="status-card">
+            <div class="status-item">
+              <span class="status-label">Votação Ativa:</span>
+              <span class="status-value" id="votacaoAtiva">-</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Total de Candidatos:</span>
+              <span class="status-value" id="totalCandidatos">-</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Total de Votos:</span>
+              <span class="status-value" id="totalVotos">-</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Admin:</span>
+              <span class="status-value" id="adminAddress">-</span>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-success" onclick="iniciarVotacao()">▶️ Iniciar Votação</button>
+            <button class="btn btn-danger" onclick="encerrarVotacao()">⏹️ Encerrar Votação</button>
+            <button class="btn" onclick="atualizarStatus()">🔄 Atualizar</button>
+          </div>
+        </div>
+
+        <!-- Aba Eleitores -->
+        <div id="eleitoresTab" class="tab-content">
+          <h3>Gerenciar Eleitores</h3>
+          
+          <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin-bottom: 30px;">
+            <h4 style="margin-bottom: 20px; color: #333;">Adicionar Novo Eleitor</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+              <div class="form-group">
+                <label for="nomeEleitor">Nome Completo:</label>
+                <input type="text" id="nomeEleitor" placeholder="Nome completo do eleitor">
+              </div>
+              <div class="form-group">
+                <label for="dataNascEleitor">Data de Nascimento:</label>
+                <input type="date" id="dataNascEleitor">
+              </div>
+              <div class="form-group">
+                <label for="cpfEleitor">CPF:</label>
+                <input type="text" id="cpfEleitor" placeholder="000.000.000-00">
+              </div>
+              <div class="form-group">
+                <label for="carteiraEleitor">Carteira Pública:</label>
+                <input type="text" id="carteiraEleitor" placeholder="0x...">
+              </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+              <button class="btn" onclick="adicionarEleitor()">➕ Adicionar Eleitor</button>
+            </div>
+          </div>
+
+          <h4>Eleitores Cadastrados</h4>
+          <div id="eleitoresList" class="eleitores-grid">
+            <div class="loading">Carregando eleitores...</div>
+          </div>
+        </div>
+
+        <!-- Aba Candidatos -->
+        <div id="candidatosTab" class="tab-content">
+          <h3>Gerenciar Candidatos</h3>
+          
+          <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin-bottom: 30px;">
+            <h4 style="margin-bottom: 20px; color: #333;">Adicionar Novo Candidato</h4>
+            <div class="form-group">
+              <label for="nomeCandidato">Nome do Candidato:</label>
+              <input type="text" id="nomeCandidato" placeholder="Nome completo do candidato">
+            </div>
+            <div style="text-align: center;">
+              <button class="btn" onclick="adicionarCandidato()">🏛️ Adicionar Candidato</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aba Resultados -->
+        <div id="resultadosTab" class="tab-content">
+          <h3>Resultados da Votação</h3>
+          <div style="text-align: center; margin-bottom: 20px;">
+            <button class="btn" onclick="carregarResultados()">🔄 Atualizar Resultados</button>
+          </div>
+          <div id="resultadosList" class="resultados-grid">
+            <div class="loading">Carregando resultados...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="messages"></div>
+
+  <script>
+    const API_BASE = 'http://localhost:4000/api';
+    let adminKey = '';
+
+    function showMessage(message, type = 'success') {
+      const messagesDiv = document.getElementById('messages');
+      const messageEl = document.createElement('div');
+      messageEl.className = `message ${type}`;
+      messageEl.textContent = message;
+      messagesDiv.appendChild(messageEl);
+      
+      setTimeout(() => {
+        messageEl.remove();
+      }, 5000);
+    }
+
+    async function apiCall(endpoint, method = 'GET', data = null) {
+      const options = {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Admin-Key': adminKey
+        }
+      };
+      
+      if (data) {
+        options.body = JSON.stringify(data);
+      }
+      
+      const response = await fetch(`${API_BASE}${endpoint}`, options);
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Erro na requisição');
+      }
+      
+      return result;
+    }
+
+    function login() {
+      const key = document.getElementById('adminKey').value;
+      if (!key) {
+        showMessage('Digite a chave de administrador', 'error');
+        return;
+      }
+      
+      adminKey = key;
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      
+      // Carrega dados iniciais
+      atualizarStatus();
+      carregarEleitores();
+    }
+
+    function showTab(tabName) {
+      // Remove active de todas as abas
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Ativa a aba selecionada
+      event.target.classList.add('active');
+      document.getElementById(tabName + 'Tab').classList.add('active');
+      
+      // Carrega dados específicos da aba
+      if (tabName === 'eleitores') {
+        carregarEleitores();
+      } else if (tabName === 'resultados') {
+        carregarResultados();
+      } else if (tabName === 'status') {
+        atualizarStatus();
+      }
+    }
+
+    async function atualizarStatus() {
+      try {
+        const status = await apiCall('/admin/status');
+        
+        document.getElementById('votacaoAtiva').textContent = 
+          status.status.votacaoAtiva ? '✅ Sim' : '❌ Não';
+        document.getElementById('totalCandidatos').textContent = 
+          status.status.totalCandidatos;
+        document.getElementById('totalVotos').textContent = 
+          status.status.totalVotos;
+        document.getElementById('adminAddress').textContent = 
+          status.status.admin;
+          
+      } catch (error) {
+        showMessage('Erro ao carregar status: ' + error.message, 'error');
+      }
+    }
+
+    async function iniciarVotacao() {
+      try {
+        const result = await apiCall('/admin/iniciar-votacao', 'POST');
+        showMessage('Votação iniciada com sucesso!');
+        atualizarStatus();
+      } catch (error) {
+        showMessage('Erro ao iniciar votação: ' + error.message, 'error');
+      }
+    }
+
+    async function encerrarVotacao() {
+      if (!confirm('Tem certeza que deseja encerrar a votação?')) return;
+      
+      try {
+        const result = await apiCall('/admin/encerrar-votacao', 'POST');
+        showMessage('Votação encerrada com sucesso!');
+        atualizarStatus();
+      } catch (error) {
+        showMessage('Erro ao encerrar votação: ' + error.message, 'error');
+      }
+    }
+
+    async function adicionarEleitor() {
+      const nome = document.getElementById('nomeEleitor').value;
+      const dataNascimento = document.getElementById('dataNascEleitor').value;
+      const cpf = document.getElementById('cpfEleitor').value;
+      const carteira = document.getElementById('carteiraEleitor').value;
+      
+      if (!nome || !dataNascimento || !cpf || !carteira) {
+        showMessage('Preencha todos os campos', 'error');
+        return;
+      }
+      
+      try {
+        const result = await apiCall('/admin/eleitor', 'POST', {
+          nome, dataNascimento, cpf, carteira
+        });
+        
+        showMessage('Eleitor adicionado com sucesso!');
+        
+        // Limpa o formulário
+        document.getElementById('nomeEleitor').value = '';
+        document.getElementById('dataNascEleitor').value = '';
+        document.getElementById('cpfEleitor').value = '';
+        document.getElementById('carteiraEleitor').value = '';
+        
+        carregarEleitores();
+      } catch (error) {
+        showMessage('Erro ao adicionar eleitor: ' + error.message, 'error');
+      }
+    }
+
+    async function carregarEleitores() {
+      const list = document.getElementById('eleitoresList');
+      list.innerHTML = '<div class="loading">Carregando eleitores...</div>';
+      
+      try {
+        const eleitores = await apiCall('/admin/eleitores');
+        
+        if (eleitores.length === 0) {
+          list.innerHTML = '<p style="text-align: center; color: #666;">Nenhum eleitor cadastrado</p>';
+          return;
+        }
+        
+        list.innerHTML = eleitores.map(eleitor => `
+          <div class="eleitor-card">
+            <h4>${eleitor.nome}</h4>
+            <div class="eleitor-info">
+              <div><strong>CPF:</strong> ${eleitor.cpf}</div>
+              <div><strong>Carteira:</strong> ${eleitor.carteira}</div>
+              <div><strong>ID:</strong> #${eleitor.id}</div>
+            </div>
+          </div>
+        `).join('');
+        
+      } catch (error) {
+        list.innerHTML = '<p style="text-align: center; color: #721c24;">Erro ao carregar eleitores</p>';
+        showMessage('Erro ao carregar eleitores: ' + error.message, 'error');
+      }
+    }
+
+    async function adicionarCandidato() {
+      const nome = document.getElementById('nomeCandidato').value;
+      
+      if (!nome) {
+        showMessage('Digite o nome do candidato', 'error');
+        return;
+      }
+      
+      try {
+        const result = await apiCall('/admin/candidato', 'POST', { nome });
+        showMessage(`Candidato "${nome}" adicionado com sucesso!`);
+        document.getElementById('nomeCandidato').value = '';
+        atualizarStatus();
+      } catch (error) {
+        showMessage('Erro ao adicionar candidato: ' + error.message, 'error');
+      }
+    }
+
+    async function carregarResultados() {
+      const list = document.getElementById('resultadosList');
+      list.innerHTML = '<div class="loading">Carregando resultados...</div>';
+      
+      try {
+        const data = await apiCall('/admin/status');
+        const resultados = data.resultados;
+        
+        if (resultados.length === 0) {
+          list.innerHTML = '<p style="text-align: center; color: #666;">Nenhum candidato cadastrado</p>';
+          return;
+        }
+        
+        // Ordena por número de votos (decrescente)
+        resultados.sort((a, b) => parseInt(b.votos) - parseInt(a.votos));
+        
+        list.innerHTML = resultados.map((candidato, index) => `
+          <div class="resultado-card">
+            <h3>${index + 1}º - ${candidato.nome}</h3>
+            <div class="votos-count">${candidato.votos}</div>
+            <div style="color: #666;">votos</div>
+          </div>
+        `).join('');
+        
+      } catch (error) {
+        list.innerHTML = '<p style="text-align: center; color: #721c24;">Erro ao carregar resultados</p>';
+        showMessage('Erro ao carregar resultados: ' + error.message, 'error');
+      }
+    }
+
+    // Formatação automática do CPF
+    document.getElementById('cpfEleitor').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length <= 11) {
+        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        e.target.value = value;
+      }
+    });
+  </script>
+</body>
+</html>
