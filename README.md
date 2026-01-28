@@ -20,9 +20,13 @@ Licença
 O eVoting é um sistema completo de votação eletrônica que utiliza a tecnologia blockchain para garantir:
 
 ✅ Transparência: Todos os votos são registrados na blockchain
+
 🔒 Segurança: Assinaturas digitais e criptografia
+
 🔐 Anonimato: Votos não são vinculados diretamente aos eleitores
+
 📊 Auditabilidade: Resultados verificáveis por todos
+
 ⛓️ Imutabilidade: Impossível alterar votos após registro
 
 Funcionalidades Principais
