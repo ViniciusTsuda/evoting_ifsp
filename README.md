@@ -1,71 +1,83 @@
-🗳️ eVoting - Sistema de Votação Eletrônica Blockchain
-Sistema de votação eletrônica descentralizado construído com blockchain Ethereum, garantindo transparência, segurança e imutabilidade dos votos.
-📋 Índice
+# 🗳️ eVoting — Sistema de Votação Eletrônica Blockchain
 
-Sobre o Projeto
-Tecnologias Utilizadas
-Arquitetura
-Pré-requisitos
-Instalação
-Configuração
-Uso
-Estrutura do Projeto
-Smart Contract
-API Endpoints
-Segurança
-Contribuindo
-Licença
+Sistema de votação eletrônica descentralizado construído com blockchain Ethereum, garantindo **transparência**, **segurança** e **imutabilidade** dos votos.
 
-🎯 Sobre o Projeto
-O eVoting é um sistema completo de votação eletrônica que utiliza a tecnologia blockchain para garantir:
+---
 
-✅ Transparência: Todos os votos são registrados na blockchain
+## 📋 Índice
 
-🔒 Segurança: Assinaturas digitais e criptografia
+* [Sobre o Projeto](#-sobre-o-projeto)
+* [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+* [Arquitetura](#️-arquitetura)
+* [Pré-requisitos](#-pré-requisitos)
+* [Instalação](#-instalação)
+* [Configuração](#️-configuração)
+* [Uso](#-uso)
+* [Estrutura do Projeto](#-estrutura-do-projeto)
+* [Smart Contract](#-smart-contract)
+* [API Endpoints](#-api-endpoints)
+* [Segurança](#-segurança)
+* [Testes](#-testes)
+* [Solução de Problemas](#-solução-de-problemas)
+* [Contribuindo](#-contribuindo)
+* [Licença](#-licença)
 
-🔐 Anonimato: Votos não são vinculados diretamente aos eleitores
+---
 
-📊 Auditabilidade: Resultados verificáveis por todos
+## 🎯 Sobre o Projeto
 
-⛓️ Imutabilidade: Impossível alterar votos após registro
+O **eVoting** é um sistema completo de votação eletrônica que utiliza tecnologia blockchain para garantir:
 
-Funcionalidades Principais
+* ✅ **Transparência**: Todos os votos são registrados na blockchain
+* 🔒 **Segurança**: Assinaturas digitais e criptografia
+* 🔐 **Anonimato**: Votos não são vinculados diretamente aos eleitores
+* 📊 **Auditabilidade**: Resultados verificáveis por todos
+* ⛓️ **Imutabilidade**: Impossível alterar votos após registro
 
-Sistema de autenticação de eleitores com CPF e data de nascimento
-Integração com MetaMask para assinatura de votos
-Painel administrativo para gerenciar eleitores e candidatos
-Votação anônima com hash único por eleitor
-Resultados em tempo real
-Prevenção de voto duplicado
+### Funcionalidades Principais
 
-🛠️ Tecnologias Utilizadas
-Backend
+* Sistema de autenticação de eleitores com CPF e data de nascimento
+* Integração com MetaMask para assinatura de votos
+* Painel administrativo para gerenciar eleitores e candidatos
+* Votação anônima com hash único por eleitor
+* Resultados em tempo real
+* Prevenção de voto duplicado
 
-Node.js - Runtime JavaScript
-Express.js - Framework web
-MySQL - Banco de dados relacional
-Ethers.js v6.8.1 - Interação com blockchain
+---
 
-Blockchain
+## 🛠️ Tecnologias Utilizadas
 
-Solidity ^0.8.0 - Linguagem para smart contracts
-Ganache - Blockchain local para desenvolvimento
-Truffle/Hardhat - Ferramentas de desenvolvimento
+### Backend
 
-Frontend
+* Node.js — Runtime JavaScript
+* Express.js — Framework web
+* MySQL — Banco de dados relacional
+* Ethers.js v6.8.1 — Interação com blockchain
 
-HTML5/CSS3 - Interface do usuário
-JavaScript Vanilla - Lógica do cliente
-MetaMask - Carteira Web3
-Ethers.js v5.7.2 - Integração blockchain no frontend
+### Blockchain
 
-Segurança
+* Solidity ^0.8.0 — Linguagem para smart contracts
+* Ganache — Blockchain local para desenvolvimento
+* Truffle / Hardhat — Ferramentas de desenvolvimento
 
-Crypto (Node.js) - Geração de hashes e salt
-ECDSA - Assinaturas digitais
-SHA-256 - Função hash criptográfica
+### Frontend
 
-🏗️ Arquitetura
+* HTML5 / CSS3 — Interface do usuário
+* JavaScript Vanilla — Lógica do cliente
+* MetaMask — Carteira Web3
+* Ethers.js v5.7.2 — Integração blockchain no frontend
+
+### Segurança
+
+* Crypto (Node.js) — Geração de hashes e salt
+* ECDSA — Assinaturas digitais
+* SHA-256 — Função hash criptográfica
+
+---
+
+## 🏗️ Arquitetura
+
+```
 ┌─────────────┐      ┌──────────────┐      ┌─────────────┐
 │   Frontend  │─────▶│   Backend    │─────▶│   MySQL     │
 │  (HTML/JS)  │      │  (Express)   │      │  Database   │
@@ -74,52 +86,70 @@ SHA-256 - Função hash criptográfica
        │                    │
        ▼                    ▼
 ┌─────────────┐      ┌──────────────┐
-│  MetaMask   │      │   Ganache    │
-│  (Wallet)   │─────▶│  Blockchain  │
+│  MetaMask   │─────▶│   Ganache    │
+│  (Wallet)   │      │  Blockchain  │
 └─────────────┘      └──────┬───────┘
                             │
                             ▼
                      ┌──────────────┐
-                     │Smart Contract│
+                     │ SmartContract│
                      │   (Solidity) │
                      └──────────────┘
-📦 Pré-requisitos
+```
+
+---
+
+## 📦 Pré-requisitos
+
 Antes de começar, você precisa ter instalado:
 
-Node.js (versão 16.0.0 ou superior)
-npm ou yarn
-MySQL (versão 5.7 ou superior)
-Ganache - Download aqui
-MetaMask - Extensão do navegador
+* Node.js (versão 16.0.0 ou superior)
+* npm ou yarn
+* MySQL (versão 5.7 ou superior)
+* Ganache
+* MetaMask (extensão do navegador)
 
-Instalação do Ganache
+### Instalação do Ganache
 
-Baixe e instale o Ganache em: https://trufflesuite.com/ganache/
-Execute o Ganache e crie um novo workspace
-Configure para usar a porta 7545 (padrão)
-Anote a primeira chave privada disponível (será usada como admin)
+1. Baixe e instale o Ganache em: [https://trufflesuite.com/ganache/](https://trufflesuite.com/ganache/)
+2. Execute o Ganache e crie um novo workspace
+3. Configure para usar a porta **7545** (padrão)
+4. Anote a primeira chave privada disponível (será usada como admin)
 
-Configuração do MetaMask
+### Configuração do MetaMask
 
-Instale a extensão MetaMask no seu navegador
-Crie ou importe uma carteira
-Adicione a rede local do Ganache:
+* Instale a extensão MetaMask no navegador
+* Crie ou importe uma carteira
+* Adicione a rede local do Ganache:
 
+```
 Nome da Rede: Ganache Local
 RPC URL: http://localhost:7545
 Chain ID: 1337
 Símbolo: ETH
+```
 
+---
 
+## 🚀 Instalação
 
-🚀 Instalação
-1. Clone o repositório
-bashgit clone https://github.com/seu-usuario/evoting-system.git
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/evoting-system.git
 cd evoting-system
-2. Instale as dependências
-bashnpm install
-3. Configure o banco de dados MySQL
-sqlCREATE DATABASE evoting;
+```
+
+### 2. Instale as dependências
+
+```bash
+npm install
+```
+
+### 3. Configure o banco de dados MySQL
+
+```sql
+CREATE DATABASE evoting;
 USE evoting;
 
 CREATE TABLE eleitores (
@@ -134,9 +164,14 @@ CREATE TABLE eleitores (
   INDEX idx_cpf (cpf),
   INDEX idx_carteira (carteira)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-4. Configure as variáveis de ambiente
-Crie um arquivo .env na pasta backend/:
-env# Configurações do Banco de Dados
+```
+
+### 4. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` na pasta `backend/`:
+
+```env
+# Configurações do Banco de Dados
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=sua_senha_mysql
@@ -155,254 +190,212 @@ ADMIN_SECRET_KEY=sua_chave_secreta_admin
 
 # Endereço do contrato (preenchido automaticamente após deploy)
 CONTRACT_ADDRESS=
-⚠️ IMPORTANTE:
+```
 
-Copie a primeira chave privada do Ganache para ADMIN_PRIVATE_KEY
-Defina uma senha forte para ADMIN_SECRET_KEY
-NUNCA compartilhe essas chaves em repositórios públicos!
+⚠️ **IMPORTANTE**
 
-5. Faça o deploy do smart contract
-bashnpm run deploy
+* Copie a primeira chave privada do Ganache para `ADMIN_PRIVATE_KEY`
+* Defina uma senha forte para `ADMIN_SECRET_KEY`
+* **NUNCA** compartilhe essas chaves em repositórios públicos
+
+### 5. Deploy do smart contract
+
+```bash
+npm run deploy
+```
+
 Este comando irá:
 
-Compilar o contrato Solidity
-Fazer deploy no Ganache
-Salvar o endereço do contrato no arquivo .env
-Gerar o arquivo evotingABI.json
+* Compilar o contrato Solidity
+* Fazer deploy no Ganache
+* Salvar o endereço do contrato no `.env`
+* Gerar o arquivo `evotingABI.json`
 
-6. Inicie o servidor backend
-bashnpm start
-# ou para desenvolvimento com hot-reload
+### 6. Inicie o servidor backend
+
+```bash
+npm start
+# ou
 npm run dev
-O servidor estará rodando em http://localhost:4000
-7. Abra as interfaces
+```
 
-Interface de Votação: Abra frontend/index.html no navegador
-Painel Admin: Abra frontend/admin.html no navegador
+Servidor disponível em: `http://localhost:4000`
 
-⚙️ Configuração
-Configuração do Ganache
+### 7. Abra as interfaces
 
-Abra o Ganache
-Certifique-se de que está usando a porta 7545
-Copie a primeira chave privada para usar como admin
-Importe algumas contas no MetaMask para testes
+* **Interface de Votação:** `frontend/index.html`
+* **Painel Admin:** `frontend/admin.html`
 
-Importar Contas no MetaMask
+---
 
-Abra o MetaMask
-Clique no ícone da conta → Importar conta
-Cole uma chave privada do Ganache
-Repita para criar múltiplas contas de teste
+## ⚙️ Configuração
 
-📖 Uso
-Para Administradores
+### Importar contas no MetaMask
 
-Acesse admin.html
-Faça login com a ADMIN_SECRET_KEY
-Adicione eleitores com:
+1. Abra o MetaMask
+2. Clique no ícone da conta → Importar conta
+3. Cole uma chave privada do Ganache
+4. Repita para criar múltiplas contas de teste
 
-Nome completo
-Data de nascimento
-CPF
-Endereço da carteira MetaMask
+---
 
+## 📖 Uso
 
-Adicione candidatos
-Inicie a votação
-Monitore os resultados em tempo real
-Encerre a votação quando necessário
+### Para Administradores
 
-Para Eleitores
+* Acesse `admin.html`
+* Faça login com `ADMIN_SECRET_KEY`
+* Cadastre eleitores (nome, data, CPF, carteira)
+* Adicione candidatos
+* Inicie e encerre a votação
+* Monitore resultados em tempo real
 
-Acesse index.html
-Faça login com:
+### Para Eleitores
 
-Nome completo (mesmo cadastrado pelo admin)
-Data de nascimento
-CPF
+* Acesse `index.html`
+* Faça login com nome, data de nascimento e CPF
+* Conecte a carteira MetaMask
+* Selecione um candidato
+* Assine e confirme o voto
 
+---
 
-Conecte sua carteira MetaMask
-Selecione um candidato
-Confirme o voto assinando a transação no MetaMask
-Aguarde a confirmação na blockchain
+## 📁 Estrutura do Projeto
 
-📁 Estrutura do Projeto
+```
 evoting-system/
 ├── backend/
 │   ├── config/
-│   │   └── db.js                 # Configuração MySQL
+│   │   └── db.js
 │   ├── controllers/
-│   │   ├── adminController.js    # Lógica admin
-│   │   ├── eleitorController.js  # Lógica eleitores
-│   │   └── votoController.js     # Lógica votação
 │   ├── models/
-│   │   ├── adminModel.js         # Modelo admin/blockchain
-│   │   └── eleitorModel.js       # Modelo eleitores
 │   ├── routes/
-│   │   ├── adminRoutes.js        # Rotas admin
-│   │   ├── eleitorRoutes.js      # Rotas eleitores
-│   │   └── votoRoutes.js         # Rotas votação
 │   ├── utils/
-│   │   └── assinatura.js         # Geração de hashes
-│   ├── .env                      # Variáveis de ambiente
-│   ├── evotingABI.json          # ABI do contrato
-│   ├── index.js                  # Servidor Express
-│   └── test-system.js           # Testes do sistema
+│   ├── .env
+│   ├── evotingABI.json
+│   ├── index.js
+│   └── test-system.js
 ├── contracts/
-│   └── EVoting.sol              # Smart contract
+│   └── EVoting.sol
 ├── frontend/
-│   ├── admin.html               # Interface admin
-│   └── index.html               # Interface votação
+│   ├── admin.html
+│   └── index.html
 ├── scripts/
-│   └── deploy.js                # Script de deploy
-├── deploy-info.json             # Info do deployment
+│   └── deploy.js
+├── deploy-info.json
 ├── package.json
 └── README.md
-📜 Smart Contract
-Principais Funções
-solidity// Autorizar eleitor a votar
+```
+
+---
+
+## 📜 Smart Contract
+
+### Principais Funções
+
+```solidity
 function autorizarEleitor(bytes32 _hash, address _endereco)
-
-// Adicionar candidato
 function adicionarCandidato(string memory _nome)
-
-// Iniciar votação
 function iniciarVotacao()
-
-// Registrar voto
-function votar(
-    uint256 _candidatoId,
-    bytes32 _eleitorHash,
-    uint8 _v,
-    bytes32 _r,
-    bytes32 _s
-)
-
-// Encerrar votação
+function votar(uint256 _candidatoId, bytes32 _eleitorHash, uint8 _v, bytes32 _r, bytes32 _s)
 function encerrarVotacao()
-
-// Obter resultados
 function obterResultados()
-
-// Obter status da votação
 function obterStatusVotacao()
-Eventos
-solidityevent EleitorAutorizado(bytes32 indexed hash, address indexed endereco);
+```
+
+### Eventos
+
+```solidity
+event EleitorAutorizado(bytes32 indexed hash, address indexed endereco);
 event CandidatoAdicionado(uint256 indexed id, string nome);
 event VotoComputado(bytes32 indexed eleitorHash, uint256 indexed candidatoId);
 event VotacaoIniciada();
 event VotacaoEncerrada();
-🔌 API Endpoints
-Rotas de Eleitor
-httpPOST /api/eleitor/login
-Content-Type: application/json
+```
 
-{
-  "nome": "João Silva",
-  "dataNascimento": "1990-05-15",
-  "cpf": "12345678901"
-}
-Rotas de Votação
-httpPOST /api/voto/votar
-Content-Type: application/json
+---
 
-{
-  "candidatoId": 1,
-  "eleitorHash": "0x...",
-  "v": 27,
-  "r": "0x...",
-  "s": "0x..."
-}
-httpGET /api/voto/resultados
-GET /api/voto/status
-Rotas Admin (Requerem X-Admin-Key header)
-httpPOST /api/admin/eleitor
-X-Admin-Key: sua_chave_secreta
+## 🔌 API Endpoints
 
-{
-  "nome": "Maria Santos",
-  "dataNascimento": "1995-03-20",
-  "cpf": "98765432100",
-  "carteira": "0x..."
-}
-httpPOST /api/admin/candidato
+### Eleitor
+
+```http
+POST /api/eleitor/login
+```
+
+### Votação
+
+```http
+POST /api/voto/votar
+GET  /api/voto/resultados
+GET  /api/voto/status
+```
+
+### Admin (X-Admin-Key)
+
+```http
+POST /api/admin/eleitor
+POST /api/admin/candidato
 POST /api/admin/iniciar-votacao
 POST /api/admin/encerrar-votacao
-GET /api/admin/status
-GET /api/admin/eleitores
-🔒 Segurança
-Medidas Implementadas
+GET  /api/admin/status
+GET  /api/admin/eleitores
+```
 
-Hashing com Salt: Cada eleitor tem um salt único
-Assinaturas Digitais: ECDSA para validar identidade
-Autenticação Admin: Chave secreta para operações administrativas
-Prevenção de Replay: Hash único por eleitor
-Validação de Carteira: Verifica correspondência eleitor-carteira
-Normalização de Dados: CPF e datas padronizados
+---
 
-Fluxo de Segurança do Voto
-1. Eleitor → Login (CPF + Data + Nome)
-2. Backend → Gera hash único (CPF|Data|Salt)
-3. Frontend → Solicita assinatura ao MetaMask
-4. MetaMask → Assina hash com chave privada
-5. Backend → Valida assinatura (v, r, s)
-6. Smart Contract → Verifica autorização
-7. Smart Contract → Registra voto
-8. Blockchain → Confirmação imutável
-🧪 Testes
-Execute os testes do sistema:
-bashnode backend/test-system.js
-Isso irá testar:
+## 🔒 Segurança
 
-✅ Geração de hashes
-✅ Consistência de dados
-✅ Normalização de datas
-✅ Conexão com banco de dados
-✅ Validação de endereços Ethereum
-✅ Limpeza de CPF
+* Hashing com salt por eleitor
+* Assinaturas digitais (ECDSA)
+* Autenticação admin via chave secreta
+* Prevenção de replay attack
+* Validação eleitor-carteira
+* Normalização de CPF e datas
 
-🐛 Solução de Problemas
-Erro: "Eleitor não autorizado"
-Solução: Certifique-se de que:
+### Fluxo de Segurança do Voto
 
-O eleitor foi cadastrado pelo admin
-A carteira MetaMask corresponde à cadastrada
-A votação está ativa
+1. Login do eleitor
+2. Geração de hash único
+3. Assinatura via MetaMask
+4. Validação backend
+5. Verificação no contrato
+6. Registro do voto
+7. Confirmação na blockchain
 
-Erro: "Assinatura inválida"
-Solução:
+---
 
-Verifique se está usando a carteira correta no MetaMask
-Recarregue a página e tente novamente
-Confirme que o MetaMask está conectado à rede Ganache
+## 🧪 Testes
 
-Erro de conexão com Ganache
-Solução:
+```bash
+node backend/test-system.js
+```
 
-Verifique se o Ganache está rodando
-Confirme que a porta é 7545
-Verifique o RPC_URL no arquivo .env
+---
 
-Banco de dados não conecta
-Solução:
+## 🐛 Solução de Problemas
 
-Verifique se o MySQL está rodando
-Confirme as credenciais no .env
-Teste a conexão: node backend/config/db.js
+* **Eleitor não autorizado**: eleitor não cadastrado ou votação inativa
+* **Assinatura inválida**: carteira incorreta ou rede errada
+* **Erro Ganache**: verifique porta e RPC_URL
+* **Erro MySQL**: valide credenciais e serviço ativo
 
-🤝 Contribuindo
-Contribuições são bem-vindas! Para contribuir:
+---
 
-Faça um Fork do projeto
-Crie uma branch para sua feature (git checkout -b feature/AmazingFeature)
-Commit suas mudanças (git commit -m 'Add some AmazingFeature')
-Push para a branch (git push origin feature/AmazingFeature)
-Abra um Pull Request
+## 🤝 Contribuindo
 
-👨‍💻 Autor
-Vinicius Hideki Tsuda
+1. Fork do projeto
+2. Crie uma branch (`git checkout -b feature/AmazingFeature`)
+3. Commit (`git commit -m 'Add some AmazingFeature'`)
+4. Push (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+---
+
+## 👨‍💻 Autor
+
+**Vinicius Hideki Tsuda**
 
 ⭐ Se este projeto foi útil para você, considere dar uma estrela!
+
 Desenvolvido com ❤️ usando Blockchain Technology
